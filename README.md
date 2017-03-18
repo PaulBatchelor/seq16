@@ -32,6 +32,8 @@ point in time, 1 for on, 0 for off. These signals can be multiplied with the
 clock signal to produce a rhythmic trigger signal that can be used inside
 of Sporth.
 
+### Controls
+
 h,j,k,l: move left, down, up, right
 
 space: toggle space on/off
