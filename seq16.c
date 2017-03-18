@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <soundpipe.h>
 #include <sporth.h>
+#include <pthread.h>
+#include <unistd.h>
 #include "seq16.h"
 #include "glyphs.h"
 
@@ -40,7 +42,6 @@ static void display(seq16_d *seq)
     int x;
     int y = 0;
     glClear(GL_COLOR_BUFFER_BIT);
-    /* glColor3f(1.0, 1.0, 1.0); */
 
     color_rgb(0xC6E1C7);
     for(y = 0; y < MAX_ROWS; y++) {
@@ -57,9 +58,7 @@ static void display(seq16_d *seq)
 void init(void)
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    /* glClearColor(0.0, 0.0, 0.0, 0.0); */
     clear_color_rgb(0x1c2933);
-    /* clear_color_rgb(0x4b3621); */
 }
 
 void reshape(int w, int h)
@@ -82,9 +81,6 @@ void errorcb(int error, const char* desc)
 
 static void key(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	//if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-	//	glfwSetWindowShouldClose(window, GL_TRUE);
-  
     seq16_d *seq = glfwGetWindowUserPointer(window);
     if(action == GLFW_PRESS) {
         switch(key) {
@@ -183,8 +179,6 @@ static void * run_loop(void *ud)
     init();
     glfwSetWindowUserPointer(seq->window, seq);
     while(seq->run) {
-		/*glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT); */
-
 		glfwGetFramebufferSize(seq->window, &w, &h);
 
         glfwPollEvents();
@@ -205,6 +199,7 @@ static void * run_loop(void *ud)
 
 	glfwTerminate();
     pthread_exit(0);
+    return NULL;
 }
 
 void seq16_start(seq16_d *seq, const char *filename)
@@ -227,7 +222,6 @@ void seq16_start(seq16_d *seq, const char *filename)
 
 
     seq16_load(seq);
-    //seq->grid[seq->pos] = SELECT_OFF;
     seq16_set_pos(seq, seq->pos);
     pthread_create(&seq->thread, NULL, run_loop, seq);
 }
