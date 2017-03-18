@@ -14,7 +14,7 @@ features to leave you wanting more:
 - Sample-accurate Clock
 - ability to work with live-coding (will close and reopen cleanly)
 
-##: Compiling
+## Compiling
 
 To compile on Linux, run "make".
 
